@@ -20,6 +20,7 @@ export const Input = styled.TextInput.attrs({
   border-radius: 4px;
   padding: 0 15px;
   border: 1px solid #eee;
+  color: #000;
 `;
 
 export const SubmitButton = styled.TouchableOpacity`
@@ -29,6 +30,7 @@ export const SubmitButton = styled.TouchableOpacity`
   border-radius: 4px;
   margin-left: 10px;
   padding: 0 2px;
+  opacity: ${props => (props.loading ? 0.7 : 1)};
 `;
 
 export const Label = styled.Text`
@@ -80,7 +82,6 @@ export const ProfileButtom = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   height: 36px;
-  opacity: ${props => (props.loading ? 0.7 : 1)};
 `;
 
 export const ProfileButtomText = styled.Text`

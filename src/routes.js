@@ -3,11 +3,21 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Main from './pages/Main/main';
 import User from './pages/User/user';
+import AsyncStorage from '@react-native-community/async-storage';
+import {useEffect, useState} from 'react';
 
 //Criação das rotas
 const Stack = createNativeStackNavigator();
 
 export default function Routes() {
+  const [login, setLogin] = useState('');
+
+  const getLogin = async () => {
+    const new_login = await AsyncStorage.getItem('UserAtual');
+
+    setLogin(new_login);
+  };
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Usuários">
@@ -25,7 +35,18 @@ export default function Routes() {
             headerBackVisible: false,
           }}
         />
-        <Stack.Screen name="User" component={User} />
+        <Stack.Screen
+          name="User"
+          component={User}
+          options={{
+            headerTitleAlign: 'center',
+            statusBarColor: '#7159c1',
+            headerTintColor: '#ffffff',
+            headerStyle: {
+              backgroundColor: '#7159c1',
+            },
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
