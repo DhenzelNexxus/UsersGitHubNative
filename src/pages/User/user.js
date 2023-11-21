@@ -1,7 +1,9 @@
 import {View, Button} from 'react-native';
 import React, {Component} from 'react';
-import {ActivityIndicator, Alert} from 'react-native';
+import {ActivityIndicator, Alert, Text} from 'react-native';
+import {WebView} from 'react-native-webview';
 import AsyncStorage from '@react-native-community/async-storage';
+import Link from '../WebView';
 import {
   Container,
   Header,
@@ -14,7 +16,9 @@ import {
   Info,
   Title,
   Author,
+  Loading,
 } from './styles';
+import {EmptyText} from '../Main/styles';
 import api from '../../services/api';
 
 export default class User extends Component {
@@ -40,6 +44,8 @@ export default class User extends Component {
 
       const userData = await api.get(`/users/${user}`);
       const response = await api.get(`/users/${user}/starred`);
+
+      console.log(response.data);
 
       this.setState({
         stars: response.data,
@@ -79,11 +85,19 @@ export default class User extends Component {
 
   render() {
     const {name, bio, avatar, stars, loading} = this.state;
+    const {navigation} = this.props;
 
+    async function setDataUrl() {
+      await AsyncStorage.setItem('url', stars);
+    }
+
+    setDataUrl();
     return (
       <Container onLayout={this.updateInfo}>
         {loading ? (
-          <ActivityIndicator color="#7159c1" size={45} />
+          <Loading>
+            <ActivityIndicator color="#7159c1" size={45} />
+          </Loading>
         ) : (
           <>
             <Header>
@@ -94,11 +108,22 @@ export default class User extends Component {
             <Stars
               data={stars}
               keyStractor={star => String(star.id)}
+              ListEmptyComponent={
+                <EmptyText>Não há Usuários Cadastrados</EmptyText>
+              }
               renderItem={({item}) => (
                 <Starred>
                   <OwnerAvatar source={{uri: item.owner.avatar_url}} />
                   <Info>
-                    <Title>{item.name}</Title>
+                    <Title
+                      onPress={() =>
+                        navigation.navigate('Webview', {
+                          star: item.html_url,
+                          name: item.name,
+                        })
+                      }>
+                      {item.name}
+                    </Title>
                     <Author>{item.owner.login}</Author>
                   </Info>
                 </Starred>

@@ -24,8 +24,10 @@
     "react-native-safe-area-context": "^4.7.4",
     "react-native-screens": "^3.27.0",
     "react-native-vector-icons": "^10.0.2",
+    "react-native-webview": "^13.6.2",
     "react-navigation": "^5.0.0",
     "react-navigation-stack": "^2.10.4",
+    "react-router-dom": "^6.19.0",
     "styled-components": "^6.1.1"
   },
   "devDependencies": {

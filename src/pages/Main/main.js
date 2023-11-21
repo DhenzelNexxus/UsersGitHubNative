@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
-import {Keyboard, ActivityIndicator, Alert} from 'react-native';
+import {Keyboard, ActivityIndicator, Alert, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+
 import AsyncStorage from '@react-native-community/async-storage';
 import {
   Container,
   Form,
   Input,
-  Label,
   SubmitButton,
   List,
   User,
@@ -15,9 +16,10 @@ import {
   Bio,
   ProfileButtom,
   ProfileButtomText,
+  RemoveIcon,
+  EmptyText,
 } from './styles';
 import api from '../../services/api';
-import {AxiosError} from 'axios';
 
 export default class Main extends Component {
   static navigationOptions = {
@@ -52,12 +54,9 @@ export default class Main extends Component {
     }
   }
 
-  handleNavigate = async user => {
+  handleNavigate = async item => {
     const {navigation} = this.props;
-
-    const login = user.login;
-    await AsyncStorage.setItem('UserAtual', login);
-
+    await AsyncStorage.setItem('UserAtual', item);
     navigation.navigate('User');
   };
 
@@ -65,6 +64,14 @@ export default class Main extends Component {
     const {users, newUser} = this.state;
     try {
       this.setState({loading: true});
+
+      const userDuplicate = users.find(user => user.login === newUser);
+
+      if (userDuplicate) {
+        throw new Error(
+          Alert.alert('Usuario Já foi Adicionado', 'Tente Novamente'),
+        );
+      }
 
       const response = await api.get(`/users/${newUser}`);
 
@@ -76,7 +83,7 @@ export default class Main extends Component {
       };
 
       this.setState({
-        users: [...users, data],
+        users: [data, ...users],
         newUser: '',
       });
 
@@ -104,6 +111,12 @@ export default class Main extends Component {
     }
   };
 
+  handleRemoveUser = login => {
+    this.setState(prevState => ({
+      users: prevState.users.filter(user => user.login !== login),
+    }));
+  };
+
   render() {
     const {users, newUser, loading} = this.state;
 
@@ -124,7 +137,7 @@ export default class Main extends Component {
             {loading ? (
               <ActivityIndicator color="#FFF" />
             ) : (
-              <Label>Adicionar</Label>
+              <Icon name="user-plus" size={20} color="#FFF" />
             )}
           </SubmitButton>
         </Form>
@@ -132,13 +145,21 @@ export default class Main extends Component {
         <List
           data={users}
           keyExtractor={user => user.login}
+          ListEmptyComponent={
+            <EmptyText>Não há Usuários Cadastrados</EmptyText>
+          }
           renderItem={({item}) => (
             <User>
-              <Avatar source={{uri: item.avatar}} />
+              <View style={{display: 'flex', flexDirection: 'row'}}>
+                <Avatar source={{uri: item.avatar}} />
+                <RemoveIcon onPress={() => this.handleRemoveUser(item.login)}>
+                  <Icon name="trash-alt" size={20} color="#F00" />
+                </RemoveIcon>
+              </View>
               <Name>{item.name}</Name>
               <Bio>{item.bio}</Bio>
 
-              <ProfileButtom onPress={() => this.handleNavigate(item)}>
+              <ProfileButtom onPress={() => this.handleNavigate(item.login)}>
                 <ProfileButtomText>Ver Perfil</ProfileButtomText>
               </ProfileButtom>
             </User>

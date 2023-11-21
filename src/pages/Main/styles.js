@@ -29,7 +29,7 @@ export const SubmitButton = styled.TouchableOpacity`
   background: #7159c1;
   border-radius: 4px;
   margin-left: 10px;
-  padding: 0 2px;
+  padding: 0 8px;
   opacity: ${props => (props.loading ? 0.7 : 1)};
 `;
 
@@ -89,4 +89,20 @@ export const ProfileButtomText = styled.Text`
   font-weight: bold;
   color: #fff;
   text-transform: uppercase;
+`;
+
+export const RemoveIcon = styled.TouchableOpacity`
+  margin: 0 auto;
+  align-items: right;
+  justify-content: right;
+  text-align: right;
+`;
+
+export const EmptyText = styled.Text`
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 50%;
+  font-size: 20px;
+  opacity: 0.3;
+  color: #000;
 `;
