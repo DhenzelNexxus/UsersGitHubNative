@@ -62,18 +62,19 @@ export default class Main extends Component {
 
   handleAddUser = async () => {
     const {users, newUser} = this.state;
+
     try {
       this.setState({loading: true});
 
-      const userDuplicate = users.find(user => user.login === newUser);
-
-      if (userDuplicate) {
-        throw new Error(
-          Alert.alert('Usuario Já foi Adicionado', 'Tente Novamente'),
-        );
-      }
-
       const response = await api.get(`/users/${newUser}`);
+
+      const duplicate = users.filter(
+        user => user.login === response.data.login,
+      );
+
+      if (duplicate.length > 0) {
+        throw new Error('Usuario já existe');
+      }
 
       const data = {
         name: response.data.name,
@@ -89,21 +90,18 @@ export default class Main extends Component {
 
       Keyboard.dismiss();
     } catch (error) {
-      if (error.response?.status === 404) {
-        Alert.alert(
-          'Error ao adicionar usuário',
-          'Tente Novamente!',
-          [
-            {
-              text: 'Conferir',
-              onPress: () => {},
-              style: 'default',
-            },
-          ],
-          {cancelable: false},
-        );
-      }
-      console.log(error);
+      Alert.alert(
+        'Error ao adicionar usuário',
+        `${error}`,
+        [
+          {
+            text: 'Conferir',
+            onPress: () => {},
+            style: 'default',
+          },
+        ],
+        {cancelable: false},
+      );
     } finally {
       this.setState({
         loading: false,

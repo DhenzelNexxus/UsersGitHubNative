@@ -4,7 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Main from './pages/Main/main';
 import User from './pages/User/user';
 import AsyncStorage from '@react-native-community/async-storage';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import Link from './pages/WebView';
 
 //Criação das rotas
