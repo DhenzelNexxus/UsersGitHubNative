@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Keyboard, ActivityIndicator, Alert, Text, View} from 'react-native';
+import React, {Component, useState} from 'react';
+import {Keyboard, ActivityIndicator, Alert, View} from 'react-native';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
