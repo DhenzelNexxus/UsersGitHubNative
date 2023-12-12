@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {WebView} from 'react-native-webview';
 import {ActivityIndicator, Alert, View, StyleSheet} from 'react-native';
-import {Loading} from './styles';
 
 const Link = ({route, navigation}) => {
   const starUrl = route.params?.star;

@@ -1,9 +1,6 @@
-import {View, Button} from 'react-native';
 import React, {Component} from 'react';
-import {ActivityIndicator, Alert, Text} from 'react-native';
-import {WebView} from 'react-native-webview';
+import {ActivityIndicator, Alert} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import Link from '../WebView';
 import {
   Container,
   Header,
@@ -108,9 +105,7 @@ export default class User extends Component {
             <Stars
               data={stars}
               keyStractor={star => String(star.id)}
-              ListEmptyComponent={
-                <EmptyText>Não há Usuários Cadastrados</EmptyText>
-              }
+              ListEmptyComponent={<EmptyText>Não há ações recentes</EmptyText>}
               renderItem={({item}) => (
                 <Starred>
                   <OwnerAvatar source={{uri: item.owner.avatar_url}} />
